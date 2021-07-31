@@ -1,10 +1,11 @@
 //import logo from './logo.svg';
 import './App.css';
-import StudentManagement from './StudentManagement'
+import Layout from './components/Layout'
 
 function App() {
   return (
-    <StudentManagement />
+    
+    <Layout />
   );
 }
 

@@ -1,0 +1,107 @@
+body {
+  word-break: break-word;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.side-bar {
+  background-color: #fcfcfc;
+
+  .nav-link {
+    color: #686f7b;
+  }
+  .active {
+    background-color: #fcfcfc !important;
+    background-image: linear-gradient(90deg, #d1976a, #c4704f);
+  }
+}
+
+.btn-save {
+  width: 100px;
+  background-color: #fcfcfc !important;
+  background-image: linear-gradient(90deg, #d1976a, #c4704f);
+}
+
+.btn-cancel {
+  width: 100px;
+  color: red;
+  background-color: #fcfcfc !important;
+  border: 1px solid red;
+}
+
+.container {
+  background-color: #f1f5f8;
+  color: #606267;
+  tbody,
+  td,
+  tfoot,
+  th,
+  thead,
+  tr {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .record-header {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    .record-cell {
+      padding-top: 9px;
+      padding-bottom: 9px;
+    }
+  }
+
+  .record {
+    font-size: 11px;
+    background: #ffffff;
+    margin-bottom: 10px;
+    .record-cell {
+      .edit-student svg {
+        font-size: 16px;
+        color: #4566b4;
+      }
+      .ban-student svg {
+        font-size: 16px;
+        color: #f4a664;
+      }
+      .delete-student svg {
+        font-size: 16px;
+        color: #f04065;
+      }
+      padding-top: 9px;
+      padding-bottom: 9px;
+    }
+  }
+  .page-item {
+    .next {
+      border-bottom-right-radius: 50%;
+      border-top-right-radius: 50%;
+    }
+    .previous {
+      border-bottom-left-radius: 50%;
+      border-top-left-radius: 50%;
+    }
+  }
+  .page-link {
+    background-color: #e6ebee;
+    color: black;
+  }
+  .page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #2b50aa;
+    border-color: #2b50aa;
+  }
+}
