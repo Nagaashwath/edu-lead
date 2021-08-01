@@ -17,6 +17,10 @@ code {
   background-color: #fcfcfc;
   box-shadow: 0 1px 20px 0 rgb(17 30 79 / 10%);
 
+  .menu-name {
+    margin-left: 12px;
+  }
+
   .nav-link {
     color: #686f7b;
   }
@@ -51,7 +55,6 @@ code {
     font-size: 16px;
     font-weight: 700;
   }
-
   .navbar-brand {
     color: #4e5055;
     font-weight: 600;
@@ -128,5 +131,20 @@ code {
     color: #fff;
     background-color: #2b50aa;
     border-color: #2b50aa;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .container-ed {
+    .record {
+      font-size: 8px !important;
+      .record-cell {
+        font-size: 6px !important;
+      }
+    }
+  }
+
+  .side-bar {
+    font-size: 10px !important;
   }
 }

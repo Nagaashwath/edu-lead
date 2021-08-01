@@ -13,5 +13,3 @@ export const getClassList=()=>{
     return axios.get(api+process.env.REACT_APP_CLASS_GET);
     }
 
-
-export const navMenuList=['Dashboard','Teacher Management','Student Management'];

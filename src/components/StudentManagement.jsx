@@ -2,12 +2,13 @@ import React,{useState,useEffect} from 'react';
 import Pagination from '../common/pagination';
 import {paginate} from '../utility/paginate';
 import {getStudentList, updateStudent,getClassList} from '../api/service';
-import { BiEdit,BiTrashAlt,BiHomeAlt } from "react-icons/bi";
+import { BiEdit,BiTrashAlt } from "react-icons/bi";
 import { FaBan } from "react-icons/fa";
 import {Offcanvas,Alert,Navbar,Nav,Container, Card} from "react-bootstrap";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { FiHome } from "react-icons/fi";
 
-const StudentManagement=()=>{
+const StudentManagement=(props)=>{
 
     const [pageSize] = useState(10);
     const [currentPage, setcurrentPage] = useState(1);
@@ -89,7 +90,7 @@ const StudentManagement=()=>{
                                             <Navbar.Toggle aria-controls="basic-navbar-nav" />
                                             <Navbar.Collapse id="basic-navbar-nav">
                                             <Nav className="me-auto">
-                                                <Nav.Link className="home-icon"><BiHomeAlt /></Nav.Link>
+                                                <Nav.Link className="home-icon"><FiHome /></Nav.Link>
                                                 <Nav.Link>&raquo;</Nav.Link>
                                                 <Nav.Link >Student Management</Nav.Link>
                                             </Nav>
