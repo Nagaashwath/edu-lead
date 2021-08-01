@@ -15,6 +15,7 @@ code {
 
 .side-bar {
   background-color: #fcfcfc;
+  box-shadow: 0 1px 20px 0 rgb(17 30 79 / 10%);
 
   .nav-link {
     color: #686f7b;
@@ -38,9 +39,33 @@ code {
   border: 1px solid red;
 }
 
-.container {
+.container-ed {
   background-color: #f1f5f8;
   color: #606267;
+  .menu-header {
+    box-shadow: 0 1px 20px 0 rgb(17 30 79 / 10%);
+  }
+
+  .student-header {
+    color: #3a5cb0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .navbar-brand {
+    color: #4e5055;
+    font-weight: 600;
+    font-size: 22px;
+  }
+
+  color: #4e5055;
+
+  .home-icon {
+    border-left: 1px solid grey;
+    color: #3a5cb0 !important;
+    font-size: 18px;
+  }
+
   tbody,
   td,
   tfoot,

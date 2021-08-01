@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import StudentManagement from './StudentManagement';
-import {navMenuList} from '../utility/service';
+import {navMenuList} from '../api/service';
 
 const Layout =(props)=>{
     const [currentItem, setCurrentItem] = useState(navMenuList[0]);
@@ -22,7 +22,7 @@ const Layout =(props)=>{
                       }
                     </ul>
                 </div>
-                <div className="d-flex flex-column flex-shrink-0 p-3 col-10 container" >
+                <div className="d-flex flex-column flex-shrink-0 p-3 col-10 container-ed " >
                     <StudentManagement />
                 </div>
       </div>

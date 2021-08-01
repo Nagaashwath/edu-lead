@@ -1,37 +1,54 @@
 import React,{useState,useEffect} from 'react';
 import Pagination from '../common/pagination';
 import {paginate} from '../utility/paginate';
-import {getStudentList, updateStudent} from '../utility/service';
-import { BiEdit,BiTrashAlt } from "react-icons/bi";
+import {getStudentList, updateStudent,getClassList} from '../api/service';
+import { BiEdit,BiTrashAlt,BiHomeAlt } from "react-icons/bi";
 import { FaBan } from "react-icons/fa";
-import {Offcanvas} from "react-bootstrap";
+import {Offcanvas,Alert,Navbar,Nav,Container, Card} from "react-bootstrap";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 const StudentManagement=()=>{
 
-    const [pageSize] = useState(4);
+    const [pageSize] = useState(10);
     const [currentPage, setcurrentPage] = useState(1);
     const [studentList, setStudentList] = useState([]);
     const [listLoad, setListLoad] = useState(false);
+    const [updateLoading, setUpdateLoading] = useState(false);
+    const [classList, setClassList] = useState([]);
+    const [currentClass, setCurrentClass] = useState('');
     const [show, setShow] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertType,setAlertType]=useState('');
     const [currentStudent,setCurrentStudent]=useState({}); 
     const placement='end'; 
 
     useEffect(()=>{
         setListLoad(true);
+        getInitialData();
+
+    },[]);
+
+    const getInitialData=()=>{
         getStudentList({ "page": "1", "limit": "10"})
           .then(function (response) {
-            setListLoad(false)
+            setListLoad(false);
             setStudentList(response.data.data.docs);
+            getClassList()
+            .then(function(response){  
+                setClassList(response.data.data.classes); 
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
           })
           .catch(function (error) {
             console.log(error);
           });
+    }
 
-    },[]);
-
-    const handleClose = () => setShow(false);
+    const handleClose = () => {setUpdateLoading(false);setShowAlert(false); setShow(false)};
     const handleShow = (currentStudent) => {setShow(true);
+        setShowAlert(false);
         setCurrentStudent({
                             first_name:currentStudent.first_name,
                             last_name:currentStudent.last_name,
@@ -51,6 +68,10 @@ const StudentManagement=()=>{
     setcurrentPage(page);
     }
 
+    const getSection=(list,currentClass)=>{  
+                         return   (list.filter((item)=>(item.class_name===currentClass)))[0].section;
+    }
+
     let students=paginate(studentList,currentPage,pageSize);
     return (<React.Fragment>
 
@@ -58,8 +79,24 @@ const StudentManagement=()=>{
            (<div className="d-flex flex-column">
                <div className="col-12">
 
-
                  <div className="d-flex flex-column">
+                              <Card className="menu-header">
+                                  <Card.Body><span className="student-header">Student Management</span></Card.Body>
+                              </Card>
+                                      <Navbar  className="mb-4 " expand="lg">
+                                        <Container>
+                                            <Navbar.Brand >Student Information</Navbar.Brand>
+                                            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                                            <Navbar.Collapse id="basic-navbar-nav">
+                                            <Nav className="me-auto">
+                                                <Nav.Link className="home-icon"><BiHomeAlt /></Nav.Link>
+                                                <Nav.Link>&raquo;</Nav.Link>
+                                                <Nav.Link >Student Management</Nav.Link>
+                                            </Nav>
+                                            </Navbar.Collapse>
+                                        </Container>
+                                        </Navbar>
+
                     <div className="d-flex flex-col record-header col-12 justify-content-between">
                                <div className="record-cell col-1 d-flex justify-content-center"><input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" /></div>
                                 <div className="record-cell col-1"> STUDENT ID</div>
@@ -83,15 +120,17 @@ const StudentManagement=()=>{
                            <div className="record-cell col-1">{student.student.section}</div>
                            <div className="record-cell col-1">{student.email}</div>
                            <div className="record-cell col-1">{student.campus}</div>
-                           <div className="record-cell col-2 d-flex flex-row justify-content-around"> 
-                               <div className="edit-student " onClick={()=>handleShow(student)}><BiEdit  /></div> 
-                               <div className="ban-student"><FaBan /></div>
-                               <div className="delete-student"><BiTrashAlt /></div>   
+                           <div className="record-cell col-2 d-flex flex-row justify-content-start"> 
+                               <div className="edit-student col-2" onClick={()=>{
+                                   setCurrentClass(student.student.class_name); 
+                                   handleShow(student)}}><BiEdit  /></div> 
+                               <div className="ban-student col-2"><FaBan /></div>
+                               <div className="delete-student col-2"><BiTrashAlt /></div>   
                             </div>
                             </div>
                           );
                     }) }
-                    </div>
+              </div>
         </div>
         <div  className="col-12 d-flex justify-content-end ">
         <Pagination 
@@ -131,13 +170,19 @@ const StudentManagement=()=>{
                                             return errors;
                                         }}
                                         onSubmit={(values, { setSubmitting }) => {
-                                            console.log(values)
+                                            //console.log(values);
+                                            setUpdateLoading(true);
                                             updateStudent(values).then(function(response){
-                                               console.log(response)
-                                                setSubmitting(false);
+                                               //console.log(response);
+                                               setUpdateLoading(false);
+                                                setShowAlert(true);
+                                                getInitialData();
+                                               setAlertType('success');
                                             }).catch(function(error){
-                                                console.log(error);
+                                                setAlertType('danger');
+                                                setShowAlert(true);
                                             });
+                                            setSubmitting(false);
                                         }}
                                         >
                                         {({ isSubmitting }) => (
@@ -182,45 +227,49 @@ const StudentManagement=()=>{
                                             <ErrorMessage className="text-danger" name="mobile_number" component="div" />
 
                                             <label htmlFor="class_name" className="form-label mt-3">Class*</label>
-                                            <Field className="form-select" component="select" name="class_name" >
-                                            <option value="II">II</option>
-                                            <option value="III">III</option>
-                                            <option value="IV">IV</option>
-                                            <option value="V">V</option>
-                                            <option value="VI">VI</option>
-                                            <option value="VII">VII</option>
-                                            <option value="VIII">VIII</option>
-                                            <option value="IX">IX</option>
-                                            <option value="X">X</option>
-                                            <option value="XI">XI</option>
-                                            <option value="XII">XII</option>
+                                            <Field value={currentClass} className="form-select" component="select" name="class_name" onChange={(e)=>{
+                                                setCurrentClass(e.target.value);
+                                            }}>
+                                            {
+                                                classList.map((classItem)=>{
+                                                    return(<option key={'className'+classItem.class_name} value={classItem.class_name}>{classItem.class_name}</option>);
+                                                })
+                                            }
+                                     
                                             </Field>
                                             <ErrorMessage className="text-danger" name="class_name" component="div" />
 
                                             <label htmlFor="section" className="form-label mt-3">Section</label>
                                             <Field className="form-select "  component="select" name="section" >
-                                            <option value="A">A</option>
-                                            <option value="B">B</option>
-                                            <option value="C">C</option>
-                                            <option value="D">D</option>
-                                            <option value="E">E</option>
-                                            <option value="F">F</option>
-                                            <option value="G">G</option>
+                                            {
+                                               getSection(classList,currentClass).map((sectionItem)=>{
+                                                    return(<option key={'sectionName'+sectionItem.section} value={sectionItem.section}>{sectionItem.section}</option>);
+                                                })
+                                            }
                                             </Field>
                                             <ErrorMessage className="text-danger " name="section" component="div" />
+
+                                            {showAlert?(<Alert variant={alertType} onClose={() => setShowAlert(false)} dismissible>
+                                                        <Alert.Heading>{'danger'===alertType?'Failure':'Success'}</Alert.Heading>
+                                                        <p>
+                                                        {('danger'===alertType?'Update Unsuccessfull':'Updated Successfully')}
+                                                        </p>
+                                                    </Alert>):''}
                                             <hr className="mt-5"/>
                                             <button className="btn btn-save m-2 " type="submit" disabled={isSubmitting}>
-                                                Save
+                                            {true===updateLoading?(<div style={{color:'white'}} className="spinner-border " role="status"></div>):'Save'}
                                             </button>
                                             
-                                            <button className="btn btn-cancel m-2" onClick={handleClose}>
+                                            <div className="btn btn-cancel m-2" onClick={handleClose}>
                                                 Cancel
-                                            </button>
+                                            </div>
+
                                             </Form>
                                         )}
                                 </Formik>
                     </Offcanvas.Body>
                 </Offcanvas>
+
     </React.Fragment>);
 }
 
